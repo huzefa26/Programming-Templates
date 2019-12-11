@@ -1,0 +1,21 @@
+MAX, Mod = 100001, 1000000007
+inv = ifact = fact = [None]*MAX
+def inverse(x, p):
+    x = x % p
+    if x == 1:
+        return x
+    return (int(-float(p) / x) * (inv[p % x] % p)) % p
+
+fact[0] = 1
+for i in range(1, MAX):
+    fact[i] = fact[i - 1] * i % MOD
+
+ifact[0] = 1
+for i in range(1, MAX):
+    inv[i] = inverse(i, MOD)
+    ifact[i] = (ifact[i - 1] * inv[i]) % MOD
+
+def ncr(n,r):
+    ret = (ifact[n - r] * ifact[r]) % MOD
+    ret = (ret * fact[n]) % MOD
+    return ret
