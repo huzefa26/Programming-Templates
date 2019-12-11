@@ -1,0 +1,12 @@
+MOD = 1000000007
+def nCrs(n, rs):
+    num = den = 1
+    c = 1 if r[0]==0 else 0
+    for i in range(r[-1]): 
+        num = (num * (n - i)) % MOD
+        den = (den * (i + 1)) % MOD
+        if i+1 in r:
+            yield num * pow(den, MOD - 2, MOD)
+
+print list(nCrs(10, [0, 2, 5, 7, 10]))
+# O/P: [1, 45, 252, 120, 1]
