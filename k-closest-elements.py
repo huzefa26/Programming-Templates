@@ -1,4 +1,8 @@
-def findClosestElements( nums, k, x):
+'''
+Find the k elements that are closest to x in an array
+'''
+
+def findClosestElements(nums, k, x):
     if len(nums) == 0 or k == 0:
         return []
     if len(nums) <= k:
