@@ -1,9 +1,12 @@
 from numpy import matmul, array, float
 from numpy.linalg import inv, pinv
 
-'''
 transition_probability_matrix = [
-[0, 2, 1, 1, 0], [1, 1, 0, 2, 1], [0, 3, 2, 0, 0], [0, 0, 0, 0,0], [2, 0, 1, 3, 0]
+    [0, 2, 1, 1, 0], 
+    [1, 1, 0, 2, 1],
+    [0, 3, 2, 0, 0], 
+    [0, 0, 0, 0, 0], 
+    [2, 0, 1, 3, 0]
 ]
 # [
 #     [0, 1, 0, 0, 0, 1],
@@ -23,8 +26,6 @@ transition_probability_matrix = [
 # ]
 transition_probability_matrix = array(transition_probability_matrix, float)
 
-
-# initial_state_distribution_matrix = [.2, .2, .2, .2, .2] # here
 
 def transition_prob_matrix(mat):
     pass
@@ -147,71 +148,6 @@ print('\nLimiting matrix:')
 for i in limiting_matrix:
     print(i)
 
-# print(7 / 21, 6 / 21, 8 / 21)
-
-'''
-
-
-def gcd(a, b):
-    if a == 0:
-        return b
-    return gcd(b % a, a)
-
-
-def list_gcd(X):
-    if len(X) == 1:
-        return X[0]
-    t = list_gcd(X[1:])
-    return gcd(X[0], t)
-
-
-def lcm(X):
-    if len(X) == 1:
-        return X[0]
-    t = lcm(X[1:])
-    return (X[0] * t) // gcd(X[0], t)
-
-
-def solution1(m):
-    n = len(m)
-    sums = [sum(i) for i in m]
-    terms = [i for i in range(n) if not sums[i]]
-    num = [0] * n
-    num[0] = 1
-    den = [1] * n
-    queue = [0]
-    unvisited = [True] * n
-    for i in terms: unvisited[i] = False
-    while queue:
-        i = queue.pop(0)
-        if unvisited[i]:
-            unvisited[i] = False
-            for j in range(1, n):
-                if m[i][j] and i != j:
-                    tempn = num[i] * m[i][j]
-                    tempd = den[i] * sums[i]
-                    num[j] = num[j] * tempd + tempn * den[j]
-                    den[j] *= tempd
-                    queue.append(j)
-    denom = lcm([den[i] for i in terms])
-    ans = [num[i] * denom // den[i] for i in terms] + [denom]
-    if list_gcd(ans) > 1:
-        x = list_gcd(ans)
-        ans = [i // x for i in ans]
-    return ans
-
-
-from numpy import matmul, array, float
-from numpy.linalg import inv, pinv
-
-transition_probability_matrix = array([
-    [0, 2, 1, 0, 0],
-    [0, 0, 0, 3, 4],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0]
-], float)
-
 
 def transfer_to_markov_chain(transition_probab_mat):
     for i in range(len(transition_probab_mat)):
@@ -234,7 +170,7 @@ def get_fundamental_matrix(Q):
         return pinv(F)
 
 
-def solution2(m):
+def test(m):
     m = array(m, float)
     absorbing_states = [i for i in range(len(m)) if not sum(m[i])]
     if len(absorbing_states) == len(m):
@@ -252,6 +188,8 @@ def solution2(m):
     # print(F)
     F = matmul(F, R)
     F = F[0]
+    # getting proper fractions from the results as the values are float and below code gives the proper numerators and denominator
+    # if you need float values, then just add 'return F' and delete the below for loop 
     for i in range(1, 101):
         poss = True
         temp = [round(f * i, 6) for f in F]
@@ -260,12 +198,7 @@ def solution2(m):
                 poss = False
                 break
         if poss:
-            return [int(t) for t in temp] + [int(sum(temp))]
-
-
-def test(m):
-    print(solution1(m))
-    print(solution2(m))
+            return [int(t) for t in temp], [int(sum(temp))]  # list of numerators, common denominator
 
 
 # test([[0, 2, 1, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0, 0], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]])
